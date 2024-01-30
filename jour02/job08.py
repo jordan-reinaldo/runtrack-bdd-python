@@ -1,4 +1,5 @@
 import mysql.connector
+import time
 
 mydb = mysql.connector.connect( 
     host="localhost",
@@ -71,15 +72,48 @@ def superficie_totale():
     except mysql.connector.Error as error:
         print(f"Échec de la récupération de la superficie totale : {error}")
 
-ajouter_animal("zoe","chien",1,"2019-01-02","france")  
-ajouter_animal("billy","singe",2,"2017-03-11","Tanzanie")  
-ajouter_animal("abdou","chat",2,"2016-04-10","Rouamnie")
-ajouter_animal("lili","chien",1,"2015-06-01","france")
-afficher_animaux()
-afficher_animaux_par_cage(2)
-modifier_animal(1,"zoe","fouine",1,"2019-01-02","france")
-supprimer_animal(6)
-afficher_animaux()
+while True:
+    print("\nMenu:")
+    print("1. Ajouter un animal")
+    print("2. Supprimer un animal")
+    print("3. Modifier un animal")
+    print("4. Afficher tous les animaux")
+    print("5. Afficher les animaux dans une cage spécifique")
+    print("6. Calculer la superficie totale des cages")
+    print("7. Quitter")
 
+    choix = input("Veuillez entrer votre choix : ")
+
+    if choix == '1':
+        nom = input("Entrez le nom de l'animal : ")
+        race = input("Entrez la race de l'animal : ")
+        cage_id = input("Entrez l'ID de la cage (laisser vide si inconnu) : ")
+        date_de_naissance = input("Entrez la date de naissance (YYYY-MM-DD) : ")
+        pays_origine = input("Entrez le pays d'origine : ")
+        ajouter_animal(nom, race, cage_id or None, date_de_naissance, pays_origine)
+    elif choix == '2':
+        animal_id = input("Entrez l'ID de l'animal à supprimer : ")
+        supprimer_animal(animal_id)
+    elif choix == '3':
+        animal_id = input("Entrez l'ID de l'animal à modifier : ")
+        nom = input("Entrez le nouveau nom de l'animal : ")
+        race = input("Entrez la nouvelle race de l'animal : ")
+        cage_id = input("Entrez le nouvel ID de la cage (laisser vide si inconnu) : ")
+        date_de_naissance = input("Entrez la nouvelle date de naissance (YYYY-MM-DD) : ")
+        pays_origine = input("Entrez le nouveau pays d'origine : ")
+        modifier_animal(animal_id, nom, race, cage_id or None, date_de_naissance, pays_origine)
+    elif choix == '4':
+        afficher_animaux()
+    elif choix == '5':
+        cage_id = input("Entrez l'ID de la cage dont vous voulez voir les animaux : ")
+        afficher_animaux_par_cage(cage_id)
+    elif choix == '6':
+        superficie_totale()
+    elif choix == '7':
+        print("Fermeture du programme...")
+        break
+    else:
+        print("Choix non valide, veuillez réessayer.")
+    time.sleep(1)
 mycursor.close()
 mydb.close()
