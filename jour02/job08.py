@@ -72,6 +72,48 @@ def superficie_totale():
     except mysql.connector.Error as error:
         print(f"Échec de la récupération de la superficie totale : {error}")
 
+def ajouter_cage(superficie, capacite_max):
+    try:
+        query = """INSERT INTO cage (superficie, capacite_max)
+                   VALUES (%s, %s);"""
+        mycursor.execute(query, (superficie, capacite_max))
+        mydb.commit()
+        print("Cage ajoutée avec succès")
+    except mysql.connector.Error as error:
+        print(f"Échec de l'insertion de la cage : {error}")
+
+def supprimer_cage(cage_id):
+    try:
+        query = "DELETE FROM cage WHERE id = %s;"
+        mycursor.execute(query, (cage_id,))
+        mydb.commit()
+        print("Cage supprimée avec succès")
+    except mysql.connector.Error as error:
+        print(f"Échec de la suppression de la cage : {error}")
+
+def modifier_cage(cage_id, superficie, capacite_max):
+    try:
+        query = """UPDATE cage
+                   SET superficie = %s, capacite_max = %s
+                   WHERE id = %s;"""
+        mycursor.execute(query, (superficie, capacite_max, cage_id))
+        mydb.commit()
+        print("Cage modifiée avec succès")
+    except mysql.connector.Error as error:
+        print(f"Échec de la modification de la cage : {error}")
+
+def afficher_cages():
+    try:
+        query = "SELECT * FROM cage;"
+        mycursor.execute(query)
+        result = mycursor.fetchall()
+        print("Cages dans le zoo :")
+        for row in result:
+            print(row)
+    except mysql.connector.Error as error:
+        print(f"Échec de la récupération des cages : {error}")
+
+
 while True:
     print("\nMenu:")
     print("1. Ajouter un animal")
@@ -80,7 +122,11 @@ while True:
     print("4. Afficher tous les animaux")
     print("5. Afficher les animaux dans une cage spécifique")
     print("6. Calculer la superficie totale des cages")
-    print("7. Quitter")
+    print("7. Ajouter une cage")
+    print("8. Supprimer une cage")
+    print("9. Modifier une cage")
+    print("10. Afficher toutes les cages")
+    print("11. Quitter")
 
     choix = input("Monsieur le directeur, veuillez faire votre choix : ")
 
@@ -110,6 +156,20 @@ while True:
     elif choix == '6':
         superficie_totale()
     elif choix == '7':
+        superficie = input("Entrez la superficie de la cage : ")
+        capacite_max = input("Entrez la capacité maximale de la cage : ")
+        ajouter_cage(superficie, capacite_max)
+    elif choix == '8':
+        cage_id = input("Entrez l'ID de la cage à supprimer : ")
+        supprimer_cage(cage_id)
+    elif choix == '9':
+        cage_id = input("Entrez l'ID de la cage à modifier : ")
+        superficie = input("Entrez la nouvelle superficie de la cage : ")
+        capacite_max = input("Entrez la nouvelle capacité maximale de la cage : ")
+        modifier_cage(cage_id, superficie, capacite_max)
+    elif choix == '10':
+        afficher_cages()
+    elif choix == '11':
         print("Fermeture du programme...")
         break
     else:
