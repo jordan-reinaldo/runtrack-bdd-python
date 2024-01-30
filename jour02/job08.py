@@ -82,7 +82,7 @@ while True:
     print("6. Calculer la superficie totale des cages")
     print("7. Quitter")
 
-    choix = input("Veuillez entrer votre choix : ")
+    choix = input("Monsieur le directeur, veuillez faire votre choix : ")
 
     if choix == '1':
         nom = input("Entrez le nom de l'animal : ")
